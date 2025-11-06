@@ -1,9 +1,19 @@
 "use client";
+"use client";
 
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
+type TooltipPayload = {
+  name?: string;
+  value?: number | string;
+  dataKey?: string;
+  color?: string;
+  payload?: Record<string, any>;
+};
+
 import { cn } from "./utils";
+
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
@@ -120,10 +130,10 @@ function ChartTooltipContent({
   labelKey,
 }: React.ComponentProps<"div"> & {
   active?: RechartsPrimitive.TooltipProps<any, any>["active"];
-  payload?: Array<RechartsPrimitive.Payload<any, any>>;
+  payload?: TooltipPayload[]
   label?: string | number;
-  labelFormatter?: React.ComponentProps<typeof RechartsPrimitive.Tooltip>["labelFormatter"];
-  formatter?: React.ComponentProps<typeof RechartsPrimitive.Tooltip>["formatter"];
+  labelFormatter?: RechartsPrimitive.TooltipProps<any, any>["labelFormatter"];
+  formatter?: RechartsPrimitive.TooltipProps<any, any>["formatter"];
   color?: string;
   hideLabel?: boolean;
   hideIndicator?: boolean;
@@ -185,7 +195,7 @@ function ChartTooltipContent({
     >
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
-        {payload.map((item: React.ComponentProps<typeof RechartsPrimitive.Tooltip>["payload"][number], index: number) => {
+        {payload.map((item: TooltipPayload, index: number) => {
           const key: string = `${nameKey || item.name || item.dataKey || "value"}`;
           const itemConfig: ChartConfig[string] | undefined = getPayloadConfigFromPayload(config, item, key);
           const indicatorColor: string | undefined = color || (item.payload as Record<string, any>)?.fill || item.color;
@@ -199,7 +209,7 @@ function ChartTooltipContent({
               )}
             >
               {formatter && item?.value !== undefined && item.name ? (
-          formatter(item.value, item.name, item, index, item.payload)
+          formatter(item.value, item.name, item, index, payload)
               ) : (
           <>
             {itemConfig?.icon ? (
@@ -282,7 +292,7 @@ function ChartLegendContent({
         className,
       )}
     >
-      {payload.map((item: RechartsPrimitive.LegendProps["payload"][number]) => {
+      {payload.map((item: RechartsPrimitive.LegendPayload) => {
         const key = `${nameKey || item.dataKey || "value"}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
