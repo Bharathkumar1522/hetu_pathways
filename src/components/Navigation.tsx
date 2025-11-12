@@ -31,18 +31,27 @@ export default function Navigation({ activeSection }: NavigationProps) {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    console.log(`Attempting to scroll to section: ${sectionId}`);
     const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
+    
+setIsMobileMenuOpen(false);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-    setIsMobileMenuOpen(false);
+if (element) {
+  const offset = 120;
+  const elementPosition = element.getBoundingClientRect().top;
+  const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+  // Wait a bit longer to let mobile menu close
+  const delay = isMobileMenuOpen ? 400 : 0;
+
+  setTimeout(() => {
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
+  }, delay);
+}
+
   };
 
   const openWhatsApp = () => {

@@ -7,7 +7,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 sm:pt-20">
       {/* Clean Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30" style={{ willChange: 'auto' }} />
 
